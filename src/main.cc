@@ -2,13 +2,13 @@
 #include <immintrin.h>
 #include "linear_map_def.h"
 
-using namespace AffineMap;
+using namespace Affine;
 
-LinearMapSet<
-	LinearMap<2, 1>,
-	LinearMap<3, 0>,
-	LinearMap<3, 2>,
-	LinearMap<3, 7>
+AffineMapSet<
+	AffineMap<2, 1>,
+	AffineMap<3, 0>,
+	AffineMap<3, 2>,
+	AffineMap<3, 7>
 	> maps;
 
 int main() {

@@ -10,72 +10,72 @@
 #include <type_traits>
 #include <utility>
 
-namespace AffineMap {
-constexpr int LINEAR_COEFF_MAX = 256;
-constexpr int LINEAR_CONST_MAX = 512;
+namespace Affine {
+    constexpr int LINEAR_COEFF_MAX = 256;
+    constexpr int LINEAR_CONST_MAX = 512;
 
-namespace {
+    namespace {
+        template <int a, int b>
+            concept ConstGreaterThanLinear = b >= -a;
+
+        template <int a>
+            concept LinearCoefficientInRange = a > 1 && a <= LINEAR_COEFF_MAX;
+
+        template <int b>
+            concept ConstantCoefficientInRange = b <= LINEAR_CONST_MAX;
+    }
+
     template <int a, int b>
-    concept ConstGreaterThanLinear = b >= -a;
+        concept ValidAffineMapCoefficients = ConstGreaterThanLinear<a, b> && LinearCoefficientInRange<a> && ConstantCoefficientInRange<b>; 
 
-    template <int a>
-    concept LinearCoefficientInRange = a > 1 && a <= LINEAR_COEFF_MAX;
-
-    template <int b>
-    concept ConstantCoefficientInRange = b <= LINEAR_CONST_MAX;
-}
-
-template <int a, int b>
-concept ValidLinearMapCoefficients = ConstGreaterThanLinear<a, b> && LinearCoefficientInRange<a> && ConstantCoefficientInRange<b>; 
-
-namespace {
-    using coefficient_pair = std::pair<int, int>;
-}
-
-// a > 1 (to avoid triviality), b >= -a (to avoid underflow), a <= 256, b <= 512
-template <int a, int b> requires ValidLinearMapCoefficients<a, b>
-struct LinearMap {
-    static constexpr coefficient_pair coeffs = { a, b };
-
-    constexpr coefficient_pair get_coeffs() {
-        return coeffs;
+    namespace {
+        using coefficient_pair = std::pair<int, int>;
     }
 
-    inline int64_t apply(int64_t x) {
-        return a * x + b;
-    }
-};
+    // a > 1 (to avoid triviality), b >= -a (to avoid underflow), a <= 256, b <= 512
+    template <int a, int b> requires ValidAffineMapCoefficients<a, b>
+        struct AffineMap {
+            static constexpr coefficient_pair coeffs = { a, b };
 
-template <class T>
-concept ValidLinearMap = requires (T x) {
-    { LinearMap{x} } -> std::same_as<T>;
-};
+            constexpr coefficient_pair get_coeffs() {
+                return coeffs;
+            }
 
-template <int n, int cnt>
-concept LinearMapIndexInRange = 0 <= n && n < cnt;
+            inline int64_t apply(int64_t x) {
+                return a * x + b;
+            }
+        };
 
-template <ValidLinearMap... LinearMaps>
-struct LinearMapSet {
-    // Number of maps
-    static constexpr std::size_t map_count = sizeof...(LinearMaps);
-    // Coefficients of the maps themselves
-    static constexpr std::array<coefficient_pair, map_count> coeffs = {LinearMaps::coeffs...};
+    template <class T>
+        concept ValidAffineMap = requires (T x) {
+            { AffineMap{x} } -> std::same_as<T>;
+        };
 
-    constexpr auto get_coeffs() {
-        return coeffs;
-    }
+    template <int n, int cnt>
+        concept AffineMapIndexInRange = 0 <= n && n < cnt;
 
-    template<int idx> requires LinearMapIndexInRange<idx, map_count>
-    using NthMap = typename std::tuple_element<idx, std::tuple<LinearMaps...> >::type;
+    template <ValidAffineMap... AffineMaps>
+        struct AffineMapSet {
+            // Number of maps
+            static constexpr std::size_t map_count = sizeof...(AffineMaps);
+            // Coefficients of the maps themselves
+            static constexpr std::array<coefficient_pair, map_count> coeffs = {AffineMaps::coeffs...};
 
-    std::array<int64_t, map_count> apply(int64_t x) {
-        std::array<int64_t, map_count> a;
+            constexpr auto get_coeffs() {
+                return coeffs;
+            }
 
-        for (int i = 0; i < map_count; ++i) {
-            a[i] = coeffs[i][0] * x + coeffs[i][1];
-        }
-        
-        return a;
-    }
-};
+            template<int idx> requires AffineMapIndexInRange<idx, map_count>
+                using NthMap = typename std::tuple_element<idx, std::tuple<AffineMaps...> >::type;
+
+            std::array<int64_t, map_count> apply_once(int64_t x) {
+                std::array<int64_t, map_count> a;
+
+                for (int i = 0; i < map_count; ++i) {
+                    a[i] = coeffs[i][0] * x + coeffs[i][1];
+                }
+
+                return a;
+            }
+        };
 }

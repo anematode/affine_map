@@ -28,6 +28,12 @@ CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
+test: all
+	TARGET_EXEC=tests
+
+$(BUILD_DIR)/$(TEST_EXEC): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+
 # Build step for C++ source
 $(BUILD_DIR)/%.cc.o: %.cc
 	mkdir -p $(dir $@)
