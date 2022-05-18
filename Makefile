@@ -24,15 +24,17 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # These files will have .d instead of .o as the output.
 CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20
 
+FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
+MAIN_OBJS := $(call FILTER_OUT,test, $(OBJS))
+
 # The final build step.
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+main: $(OBJS)
+	$(CXX) $(MAIN_OBJS) -o $(BUILD_DIR)/main $(LDFLAGS)
 
-test: all
-	TARGET_EXEC=tests
+TESTS_OBJS := $(call FILTER_OUT,main, $(OBJS))
 
-$(BUILD_DIR)/$(TEST_EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+tests: $(TESTS_OBJS) 
+	$(CXX) $(TESTS_OBJS) -o $(BUILD_DIR)/tests $(LDFLAGS)
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cc.o: %.cc

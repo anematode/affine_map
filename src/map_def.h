@@ -72,7 +72,7 @@ namespace Affine {
                 std::array<int64_t, map_count> a;
 
                 for (int i = 0; i < map_count; ++i) {
-                    a[i] = coeffs[i][0] * x + coeffs[i][1];
+                    a[i] = coeffs[i].first * x + coeffs[i].second;
                 }
 
                 return a;

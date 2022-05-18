@@ -1,8 +1,8 @@
-#include "linear_map_def.h"
+#include "map_def.h"
 #include <cassert>
 #include <iostream>
 
-using namespace AffineMap;
+using namespace Affine;
 
 AffineMapSet<
     AffineMap<2, 1>,
@@ -13,4 +13,11 @@ AffineMapSet<
 
 int main() {
     assert(map_set.get_coeffs().size() == 4);
+
+    auto a = map_set.apply_once(5);
+
+    assert(a[0] == 11);
+    assert(a[1] == 15);
+    assert(a[2] == 17);
+    assert(a[3] == 22);
 }

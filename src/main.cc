@@ -1,6 +1,6 @@
 #include <iostream>
 #include <immintrin.h>
-#include "linear_map_def.h"
+#include "map_def.h"
 
 using namespace Affine;
 
