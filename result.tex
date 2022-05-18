@@ -1,15 +1,21 @@
 \documentclass{article}
 
+\usepackage{mathtools}
 
 \begin{document}
 We want to iterate the map $x\mapsto \{2x+1, 3x, 3x+2, 3x+7\}$, starting from $x=1$, and show that all $x$ of a certain congruence class are achievable. Let the set of unachievable numbers of the form $ax+b$ be $U_{a,b}$. The question asks whether $U_{8,7}$ is empty, and the computation establishes that $U_{4,3}$ is not empty, with its least element being $4443$.
 
-The existence of a few sporadic fundamental solutions and apparent closure under $x\mapsto 3x+2$ is suggestive of the following proof structure. To prove that $ax+b$ is always achievable for some fixed $a>0$,$0\leq b<a$:
+The existence of a few sporadic fundamental solutions and apparent closure under $x\mapsto 3x+2$ is suggestive of the following proof structure. To prove that $ax+b$ is always achievable for some fixed $a>0$, $0\leq b<a$:
 
-1. Establish a fairly easy class of elements which are explicitly achievable.
+1. Establish a fairly easy class of elements which are achievable.
+
 2. Find an explicit, if large, $M$ such that if there exists $k_1$ such that $ak_1+b\in U_{a,b}$, then there exists $k_2<k_1$ such that $ak_2+b\in U_{a,b}$.
+
 3. Brute-force compute all solutions up to $M$.
+
 4. If no such solutions are found, then $U_{a,b}$ is empty by the method of descent (it must contain a least value, but then there must be a lesser value, so it is empty).
 
+(2) is obviously the challenging part. We work in reverse from $k_1$ (we'll fix $(a,b)=(8,7)$ from now on and let $U\coloneqq U_{8,7}$).
 
+Note that $2x+1\equiv 1\,(\operatorname{mod} 2)$, $3x\equiv \,0(\operatorname{mod} 3)$, $3x+2\equiv \,2(\operatorname{mod} 3)$, and $3x+7\equiv 1(\operatorname{mod} 3)$. Given some $k$ we thus have to consider all four of these congruences separately, and then for each possible predecessor consider each case, and so forth---a tree of possibilities.
 \end{document}

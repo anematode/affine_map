@@ -1,3 +1,5 @@
 *.swp
 *.d
 build
+result*
+!result.tex
