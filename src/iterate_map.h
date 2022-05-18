@@ -172,7 +172,7 @@ namespace Affine {
 
     /**
      * Straightforward solution which uses a bitset and simply iterates over the numbers directly. This method
-     * is also platform-agnostic.
+     * is also platform-agnostic, which is obviously nice.
      */
     template<AffineMapSet Maps, int64_t max_entry=_DEFAULT_MAX_ENTRY>
         class StandardIterateMap : public IterateMap<Maps, max_entry> {
@@ -245,15 +245,18 @@ namespace Affine {
             }
 
             void clear_data() {
-
+                entries.clear();
             }
 
             bool is_reachable(int64_t i) {
-
+                return entries[i];
             }
 
             void write_to_file(const char* filename) {
 
             }
         };
+
+
+
 }
