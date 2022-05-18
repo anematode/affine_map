@@ -1,6 +1,6 @@
 #include <iostream>
 #include <immintrin.h>
-#include "map_def.h"
+#include "affine.h"
 
 using namespace Affine;
 

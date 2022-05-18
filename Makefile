@@ -22,10 +22,10 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20
+CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20 -g
 
 FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
-MAIN_OBJS := $(call FILTER_OUT,test, $(OBJS))
+MAIN_OBJS := $(call FILTER_OUT,perf, $(OBJS))
 
 # The final build step.
 main: $(OBJS)
@@ -33,8 +33,8 @@ main: $(OBJS)
 
 TESTS_OBJS := $(call FILTER_OUT,main, $(OBJS))
 
-tests: $(TESTS_OBJS) 
-	$(CXX) $(TESTS_OBJS) -o $(BUILD_DIR)/tests $(LDFLAGS)
+perf: $(TESTS_OBJS) 
+	$(CXX) $(TESTS_OBJS) -o $(BUILD_DIR)/perf $(LDFLAGS)
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cc.o: %.cc
