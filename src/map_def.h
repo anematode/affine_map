@@ -61,7 +61,7 @@ namespace Affine {
             // Coefficients of the maps themselves
             static constexpr std::array<coefficient_pair, map_count> coeffs = {AffineMaps::coeffs...};
 
-            constexpr auto get_coeffs() {
+            constexpr auto get_coeffs() const {
                 return coeffs;
             }
 

@@ -22,7 +22,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20 -g
+CPPFLAGS := $(INC_FLAGS) -MMD -MP -std=c++20 -g -O3
 
 FILTER_OUT = $(foreach v,$(2),$(if $(findstring $(1),$(v)),,$(v)))
 MAIN_OBJS := $(call FILTER_OUT,perf, $(OBJS))
